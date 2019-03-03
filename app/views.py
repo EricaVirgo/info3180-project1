@@ -11,6 +11,7 @@ from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import LoginForm
 from app.models import UserProfile
 from werkzeug.security import check_password_hash 
+from werkzeug.security import generate_password_hash
 
 
 ###
@@ -46,9 +47,10 @@ def login():
             # Then store the result of that query to a `user` variable so it can be
             # passed to the login_user() method below.
 
-            user = UserProfile.query.filter_by( username=uname, password=pword).first()
+            #password  = generate_password_hash(pword, method='pbkdf2:sha256')
+            user = UserProfile.query.filter_by( username=uname).first()
 
-            if user is not None:
+            if user is not None:            
                 if check_password_hash(user.password, pword): 
                     
                     login_user(user)
@@ -59,6 +61,8 @@ def login():
            
 
             # remember to flash a message to the user
+        
+            flash("Incorrect Username or Password entered.", "danger")
             return redirect(url_for("home"))  # they should be redirected to a secure-page route instead
     return render_template("login.html", form=form)
 
