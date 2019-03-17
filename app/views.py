@@ -8,7 +8,7 @@ This file creates your application.
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
-from app.forms import LoginForm
+from app.forms import NewProfileForm
 from app.models import UserProfile
 from werkzeug.security import check_password_hash 
 from werkzeug.security import generate_password_hash
@@ -30,63 +30,32 @@ def about():
     return render_template('about.html')
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if request.method == "POST":
-        # change this to actually validate the entire form submission
-        # and not just one field
-        if form.validate_on_submit():
-            # Get the username and password values from the form.
-            uname = form.username.data
-            pword = form.password.data
+@app.route('/profile/', methods=["POST", "GET"])
+def profile():
+    """Render the website's add new profile page."""
+    NewP = NewProfileForm()
+    if request.method =="POST":
+        if NewP.validate_on_submit():
+            flash("Profile added.", "success")
+            return redirect(url_for("home")  )          
             
-            # using your model, query database for a user based on the username
-            # and password submitted. Remember you need to compare the password hash.
-            # You will need to import the appropriate function to do so.
-            # Then store the result of that query to a `user` variable so it can be
-            # passed to the login_user() method below.
-
-            #password  = generate_password_hash(pword, method='pbkdf2:sha256')
-            user = UserProfile.query.filter_by( username=uname).first()
-
-            if user is not None:            
-                if check_password_hash(user.password, pword): 
-                    
-                    login_user(user)
-                    flash("You have successfully logged in.", "success")
-                    return redirect(url_for("secure_page"))
-
-            # get user id, load into session
-           
-
-            # remember to flash a message to the user
+        else:
+            flash("Incorrect information submitted.", "danger")
+            return redirect(url_for("profile"))
         
-            flash("Incorrect Username or Password entered.", "danger")
-            return redirect(url_for("home"))  # they should be redirected to a secure-page route instead
-    return render_template("login.html", form=form)
+    return render_template('profile.html', form=NewP)
+
+@app.route('/profiles/')
+def profiles():
+    """Render the website's list of profiles page."""
+    return render_template('profiles.html')
+
+@app.route('/profile/<userid>')
+def viewProfile():
+    """Render the website's individual profile page by specific user id."""
+    return render_template('about.html')
 
 
-# user_loader callback. This callback is used to reload the user object from
-# the user ID stored in the session
-@login_manager.user_loader
-def load_user(id):
-    return UserProfile.query.get(int(id))
-
-
-@app.route('/secure_page')
-@login_required
-def secure_page():
-    return render_template("secure_page.html")
-
-
-@app.route('/logout')
-@login_required
-def logout():
-    
-    logout_user()
-    flash("Logged Out", "success")
-    return redirect(url_for('home'))
 
 
 ###

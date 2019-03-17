@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "!$3cr3Tk33y"
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://lab5:lab5password@localhost/lab5"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://project1:password@localhost/project1"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True # added just to suppress a warning
 
 db = SQLAlchemy(app)
@@ -17,8 +17,3 @@ login_manager.login_view = 'login'
 
 app.config.from_object(__name__)
 from app import views
-
-
-
-### Unames: CrazyParticle, EricaVirgo 
-### passwords: password, lab5
