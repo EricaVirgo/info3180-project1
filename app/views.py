@@ -13,6 +13,13 @@ from app.models import UserProfile
 from werkzeug.security import check_password_hash 
 from werkzeug.security import generate_password_hash
 
+import datetime
+
+def format_date_joined(y, m, d):
+    date_joined = datetime.date(y, m, d) 
+    return date_joined.strftime("%B %d, %Y")
+
+
 
 ###
 # Routing for your application.
@@ -34,16 +41,20 @@ def about():
 def profile():
     """Render the website's add new profile page."""
     NewP = NewProfileForm()
+    
+    now = datetime.datetime.today()
+
     if request.method =="POST":
         if NewP.validate_on_submit():
+            
             flash("Profile added.", "success")
-            return redirect(url_for("home")  )          
+            return redirect(url_for("profiles")  )          
             
         else:
             flash("Incorrect information submitted.", "danger")
             return redirect(url_for("profile"))
         
-    return render_template('profile.html', form=NewP)
+    return render_template('profile.html', form=NewP, created_on=format_date_joined(now.year, now.month,now.day) )
 
 @app.route('/profiles/')
 def profiles():
