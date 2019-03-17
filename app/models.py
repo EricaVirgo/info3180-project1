@@ -19,7 +19,7 @@ class UserProfile(db.Model):
     location = db.Column(db.String(255))
     biography = db.Column(db.String(255))
     photo = db.Column(db.String(255))
-    created_on = db.Column(db.String(255))
+    created_on = db.Column(db.String(80))
 
 
     
@@ -31,7 +31,9 @@ class UserProfile(db.Model):
         self.location = location
         self.biography = biography
         self.photo = photo
-        self.created_on = datetime.datetime.today()
+        joined = datetime.datetime.today()
+        self.created_on = joined.strftime("%B %d, %Y")  
+         
 
 
     def is_authenticated(self):
