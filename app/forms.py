@@ -5,8 +5,8 @@ from wtforms.validators import DataRequired, Email
 
 
 class NewProfileForm(FlaskForm):
-    firstname = StringField('Firstname', validators=[DataRequired()])
-    lastname = StringField('Lastname', validators=[DataRequired()])
+    firstname = StringField('First Name', validators=[DataRequired()])
+    lastname = StringField('Last Name', validators=[DataRequired()])
     
     gender = SelectField('Gender', choices=[('Male', 'Male'),('Female','Female')])
 
@@ -18,6 +18,4 @@ class NewProfileForm(FlaskForm):
     
     photo = FileField('Profile Picture', validators=[FileRequired(), FileAllowed(['jpg', 'png', 'gif'])])
     
-    submit = SubmitField('Add Profile')
-
     

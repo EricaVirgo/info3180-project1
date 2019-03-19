@@ -1,3 +1,61 @@
 body {
     padding-top: 5rem;
+    background-color: #deeff5 ;
+}
+
+form{
+    padding: 25px;
+    align-self: center;
+    background-color: white ;
+    border-top: 5px solid #006DFF;
+}
+
+button{
+    background-color: #32CD32;
+    box-shadow: none;
+    color: white;
+}
+
+img{
+    height: 100px;
+    width: 100px;
+    margin:10px ;
+}
+
+
+
+.layout{
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 5px solid #006DFF;
+    height: 150px;
+    width: 800px ;
+    
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    background-color: white ;
+}
+
+#name{
+    font-weight: bold;
+}
+
+#view-prof-btn{
+    border-radius: 12px;
+    height: 33px;
+    width: 150px;
+}
+
+#pic-box{
+    justify-content: left ;
+}
+
+#info-box{
+    justify-content: left ;
+
+}
+
+#btn-box{
+    justify-content: center ;
+    margin-left: 40px;
 }

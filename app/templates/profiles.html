@@ -4,11 +4,28 @@
 <h1 class="page-header">Profiles</h1>
 {% include 'flash_messages.html' %}
 
-<div class= "layout">  
-    {% for prof in range(3) %}
-        print ("Profile found")
-    {% endfor %}
-</div>
+
+{% for prof in users %}
+    <div class= "layout">  
+        <div id= "pic-box">  
+        <img src="{{ url_for('static', filename = 'uploads/' + prof.photo ) }}">  </img> </br>
+        </div>
+
+        <div id= "info-box">  
+        <p id="name"> {{ prof.firstname }} {{ prof.lastname }}</p> </br>
+        {{ prof.gender }} </br>
+        {{ prof.location }}  </br>
+        </div>
+
+        <div id= "btn-box">  
+        <a href= " {{ url_for('profiles', userid= userid ) }}">
+        <button id="view-prof-btn"  type="submit" > View Profile </button> 
+        </a>
+        </div>
+
+    </div>
+{% endfor %}
+
     
 
 {% endblock %}

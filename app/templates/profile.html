@@ -4,7 +4,7 @@
   <div class="login-form center-block">
     <h2>Add Profile</h2>
     {% include 'flash_messages.html' %}
-    <form action="{{ url_for('profile') }}" method="post">
+    <form action="{{ url_for('profile') }}" method="post" enctype ="multipart/form-data">
       {{ form.csrf_token }}
       <div class="form-group">
         {{ form.firstname.label }}
@@ -33,7 +33,7 @@
       <div class="form-group">
         {{ form.photo.label }}
         {{ form.photo(class='form-control') }}
-      </div>          
+      </div>       
       
       <button type="submit" name="submit" class="btn btn-primary btn-block">Add Profile</button>
     </form>

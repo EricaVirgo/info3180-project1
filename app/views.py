@@ -5,14 +5,17 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
+
 from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from app.forms import NewProfileForm
 from app.models import UserProfile
-from werkzeug.security import check_password_hash 
-from werkzeug.security import generate_password_hash
+from werkzeug.utils import secure_filename
+#from werkzeug.security import check_password_hash 
+#from werkzeug.security import generate_password_hash
 
+import os
 import datetime
 
 def format_date_joined(y, m, d):
@@ -20,6 +23,13 @@ def format_date_joined(y, m, d):
     return date_joined.strftime("%B %d, %Y")
 
 
+def get_uploaded_images():
+    photo_list = []
+    rootdir = os.getcwd()
+    for subdir, dir, files in os.walk(rootdir + '/app/static/uploads'):
+        for file in files:
+            photo_list = photo_list + [os.path.join(file)]
+    return photo_list 
 
 ###
 # Routing for your application.
@@ -45,7 +55,29 @@ def profile():
     now = datetime.datetime.today()
 
     if request.method =="POST":
+
         if NewP.validate_on_submit():
+            #collects user information
+            fname = NewP.firstname.data
+            lname = NewP.lastname.data
+            email = NewP.email.data
+            loc = NewP.location.data
+            gender = NewP.gender.data
+            biography = NewP.biography.data
+            
+            #saves the photo
+            photo = request.files['photo']
+            filename = secure_filename(photo.filename)
+            photo.save(os.path.join( app.config['UPLOAD_FOLDER'], filename))
+    
+            #generates the created_on date
+            created_on=format_date_joined(now.year, now.month,now.day)
+            
+            
+            new_Prof = UserProfile(first_name=fname, last_name=lname, gender=gender, email=email, location=loc, biography=biography, photo=filename, joined=created_on)
+            
+            db.session.add(new_Prof)
+            db.session.commit()
             
             flash("Profile added.", "success")
             return redirect(url_for("profiles")  )          
@@ -54,17 +86,19 @@ def profile():
             flash("Incorrect information submitted.", "danger")
             return redirect(url_for("profile"))
         
-    return render_template('profile.html', form=NewP, created_on=format_date_joined(now.year, now.month,now.day) )
+    return render_template('profile.html', form=NewP )
 
 @app.route('/profiles/')
 def profiles():
     """Render the website's list of profiles page."""
-    return render_template('profiles.html')
+    profs = UserProfile.query.order_by(UserProfile.lastname).all()
+    return render_template('profiles.html', users=profs)
 
-@app.route('/profile/<userid>')
-def viewProfile():
+@app.route('/profile/<userid>', methods=["GET"])
+def viewProfile(userid):
     """Render the website's individual profile page by specific user id."""
-    return render_template('about.html')
+    profile = UserProfile.query.filter_by(ID=userid).first()
+    return render_template('profiles.html', users=profile )
 
 
 

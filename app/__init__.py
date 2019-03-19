@@ -5,6 +5,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "!$3cr3Tk33y"
+UPLOAD_FOLDER = './app/static/uploads'
+
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://project1:password@localhost/project1"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True # added just to suppress a warning
 

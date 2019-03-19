@@ -23,7 +23,7 @@ class UserProfile(db.Model):
 
 
     
-    def __init__(self, first_name, last_name, gender, email, location, biography, photo):
+    def __init__(self, first_name, last_name, gender, email, location, biography, photo, joined):
         self.firstname = first_name
         self.lastname = last_name
         self.gender = gender
@@ -31,8 +31,8 @@ class UserProfile(db.Model):
         self.location = location
         self.biography = biography
         self.photo = photo
-        joined = datetime.datetime.today()
-        self.created_on = joined.strftime("%B %d, %Y")  
+        #joined = datetime.datetime.today()
+        self.created_on = joined      #joined.strftime("%B %d, %Y")  
          
 
 
